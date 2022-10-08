@@ -6,7 +6,7 @@
 
 标识符分为：
 
-- **关键字（保留字）** ： 例 int、float、char、 if、 else、while 等
+- **关键字（保留字）** ： 如 `typedef` 、`int` 、 `if` 、 `return` 等
 - **用户定义的标识符**
 
 
@@ -18,10 +18,10 @@
 **C语言中的数据类型：**
 
 - **整型** 
-    - 有符号整形 (int、short、long、long long)：int占4字节
-    - 无符号整形 (unsigned int 等)
+    - 有符号整形 (`int` 、 `short` 、 `long` 、 `long long` )：int占4字节
+    - 无符号整形 ( `unsigned int` 等)
 - **字符型 (char)** ：表示单个字符，用单引号占一字节，本质是该字符表示的ASCII值（整型）
-    - 'A'：65 	'a'：97
+    - 'A'：65 ， 'a'：97
 - **浮点型(实型)**
     - 单精度float
     - 双精度double    `%08.3f\n` 表示显示8位数（包含小数点）， 不足8位用0填充，且保留3位小数
