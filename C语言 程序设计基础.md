@@ -1339,6 +1339,154 @@ int main(){
 
 <br>
 
+
+
+# 函数题
+
+### 1、有序链表的并集与去重 (9分)
+
+给定两个带头结点的严格降序的链表 `L1` 和 `L2`，要求你求两个链表的并集，其中元素仍然严格降序排列，且必须排除重复元素；重复的元素必须链成另一个降序排列的链表。完成去重合并后，并集链表的表头为 `L1`，重复元素链表的表头为 `L2`。
+
+例如：`L1`→头结点→13→10→9→5；`L2`→头结点→15→10→5→2。
+
+则合并后：`L1`→头结点→15→13→10→9→5→2；`L2`→头结点→10→5。
+
+(这里把L1L2从下面指向头结点更好理解)
+
+#### 函数接口定义：
+
+```c++
+void ListUnion( List L1, List L2 )
+```
+
+其中`List`结构定义如下：
+
+```c++
+// 给Node*起别名为PtrToNode
+typedef struct Node *PtrToNode;
+
+// 定义结构体Node, 它包含2个成员：int型的key, 指向node类型的指针Next
+struct Node {
+    int Key;
+    PtrToNode Next;
+};
+
+// 给PtrToNode起别名为List
+typedef PtrToNode List;
+```
+
+要求算法额外空间复杂度为O(1)，时间复杂度为O(n)。
+
+#### 裁判测试程序样例：
+
+```c++
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node *PtrToNode;
+struct Node {
+    int Key;
+    PtrToNode Next;
+};
+typedef PtrToNode List;
+
+List Read(); /* 细节在此不表 */
+void Print( List L ); /* 细节在此不表；空链表将输出NULL */
+
+// 构造函数 声明
+void ListUnion( List L1, List L2 );
+
+int main()
+{
+    List L1, L2;
+    L1 = Read();
+    L2 = Read();
+    ListUnion(L1, L2);
+    Print(L1);
+    Print(L2);
+    return 0;
+}
+
+/* 你的代码将被嵌在这里 */
+```
+
+#### 输入样例：
+
+```
+4
+13 10 9 5
+4
+15 10 5 2
+```
+
+#### 输出样例：
+
+```
+15 13 10 9 5 2
+10 5
+```
+
+#### 代码：
+
+```c++
+// 合并两个链表 并集降序并删除重复元素 重复元素单独形成一个降序链表
+void ListUnion(List L1,List L2){
+    
+    // a,b为遍历两个链表的指针 tempa、tempb是a、b的前一个元素, 用于插入
+    List a,b,tempa,tempb;
+    a = L1->Next;
+    b = L2->Next;
+    tempa = L1;
+    tempb = L2;
+    
+    // 只要ab不为空
+    while(a!=NULL&&b!=NULL){
+        // 当b较大时
+        if(a->Key < b->Key){
+            // 将b取下 
+            tempb->Next = b->Next;
+            
+            // 将b插到a的前面
+            tempa->Next = b;
+            b->Next = a;
+            
+            // 更新b为tempb的后一个元素 a向后移动一位
+            b = tempb ->Next;
+            tempa = tempa->Next;
+        }
+        // 当ab相等时
+        else if(a->Key == b->Key){
+            // a、b、tmpa、tmpb均向后移动一位 重复元素在两个链表中各存在一次
+            tempa = tempa->Next;
+            a = a->Next;
+            tempb = tempb->Next;
+            b = b->Next;
+        }
+        // 如果a比较大时
+        else if(a->Key > b->Key){
+            // a向后移动
+            a = a->Next;
+            tempa = tempa->Next;
+        }
+    }
+    
+    if(b != NULL){
+        //cout << tempa->data <<endl;
+        // 将b接到tmpa的后面 tmpb后面为空
+        tempa->Next = b;
+        tempb ->Next = NULL;
+    }
+}
+```
+
+
+
+<br>
+
+<br>
+
+<br>
+
 # 补充
 
 ### 从源文件到可执行文件
@@ -1573,3 +1721,16 @@ C语言中，全局变量和局部静态变量是存储在静态存储区的，�
 （2）只不过它的生命周期和全局变量一样长而已。
 
 （3）全局变量一定是定义在函数外部的。
+
+
+
+
+
+c++中 . 和 -> 主要是用法上的不同。
+1、A.B 则A为对象或者结构体；
+2、A->B 则A为指针，->是成员提取。A->B是提取A中的成员B，A只能是指向类、结构、联合的指针；
+
+```
+p->val 和 (*p).val使用上等价
+```
+
