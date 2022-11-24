@@ -555,6 +555,8 @@ struct sturdent{
     int num;
     char name[10];
 }sturdents[50];
+
+
 ```
 
 - 结构的定义以分号结束，结构的定义整体是一条语句
