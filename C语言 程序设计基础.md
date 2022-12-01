@@ -2296,6 +2296,100 @@ void ListUnion(List L1,List L2){
 
 <br>
 
+
+
+### 2、二叉搜索树中不小于X的元素（8分）
+
+给定一棵二叉搜索树 `T` 和一个整数`X`，要求编写函数，按**非递增序**打印出 `T` 中所有不小于 `X` 的元素。
+
+#### 函数接口定义：
+
+```c++
+void Print_NLT( Tree T, int X );
+```
+
+其中 `Tree` 定义为：
+
+```
+typedef struct TreeNode *Tree;
+struct TreeNode {
+    int Element;
+    Tree  Left;
+    Tree  Right;
+};
+```
+
+#### 裁判测试程序样例：
+
+```c++
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct TreeNode *Tree;
+struct TreeNode {
+    int Element;
+    Tree  Left;
+    Tree  Right;
+};
+
+Tree BuildTree(); /* details omitted */
+void Output( int X ); /* details omitted */
+
+void Print_NLT( Tree T,  int X );
+
+int main()
+{
+    Tree T;
+    int X;
+
+    T = BuildTree();
+    scanf("%d", &X);
+    Print_NLT( T, X );
+    printf("End\n");
+
+    return 0;
+}
+
+/* 请在这里填写答案 */
+```
+
+#### 输出样例1（针对图1）：
+
+```out
+92 91 90 85 81 80 End
+```
+
+![img](https://images.ptausercontent.com/91)
+**图 1**
+
+#### 输出样例2（针对图2）：
+
+```
+End
+```
+
+![img](https://images.ptausercontent.com/92)
+**图 2**
+
+### 代码：
+
+```c++
+void Print_NLT( Tree T,  int X ){
+    if(T==NULL){
+        return;
+    }
+    Print_NLT(T->Right,X);
+    if(T->Element>=X){
+        printf("%d ",T->Element);
+    }
+    Print_NLT(T->Left,X);
+}
+```
+
+
+
+<br>
+
 <br>
 
 <br>
