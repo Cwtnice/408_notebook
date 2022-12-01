@@ -346,6 +346,22 @@ char t[6] = {'H', 'I'};	// 没赋初始值的元素为0，也就是'\0'
 
 ### putchar() 和 getchar()
 
+- putchr()：
+    - 输出单个字符，可以填数字，也可以填字符，返回值都是字符
+- getchar()：
+    - 不带任何参数，用于读取用户从键盘输入的单个字符
+
+
+
+```c
+// 返回结果 A65
+sum = putchar('A');
+printf("%d",sum);
+
+int ch = getchar();	//实际变量ch中放的是读到的那个字符的ASCII码值
+putchar(ch);	//putchar接收到一个参数（ASCII码值），输出相对应的字符
+```
+
 
 
 <br>
@@ -426,10 +442,26 @@ int b = strlen(str);    // 7
     C. static char s[]="abcdefghij";
     D. char *s; s=(char *)malloc(10); strcpy(s,"abc123");
     ```
-    
+
     解释：
+
     
+
+3. 若有 `char w; int x; float y; double z;` 则表达式 `w*x+z-y` 值的数据类型为 **double**
+    计算表达式时，首先要将各个变量强制转化为最高的存储类型
+
     
+
+4. 以下选项中属于非线性结构的是 A
+
+    ```
+    A.广义表
+    B.队列
+    C.优先队列
+    D.栈
+    ```
+
+    广义表(Lists，又称列表)是一种非连续性的数据结构，是线性表的一种推广。即广义表中放松对表元素的原子限制，**容许它们具有其自身结构**
 
 
 
