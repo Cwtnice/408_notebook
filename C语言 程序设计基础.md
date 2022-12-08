@@ -2308,6 +2308,37 @@ int main()
 
 <br>
 
+
+
+4-4 下列程序的输出结果是：`First:12 Next:13`
+
+```c++
+#define  s(x,y)  x^=y^=x^=y     // x^=y^=x^=y的作用是将x和y的值对调
+int  func( int a[], int n )
+{   int i, j, k = 0;
+    for ( i = 0; i < n; i++ ) 
+        for ( j = i+1; j < n; j++ ) 
+            if ( a[i] > a[j] ) k++; 
+    return k;
+}
+
+int main()
+{   int a[7] = {5,1,7,4,3,6,2};
+    printf("First:%d ", func(a,7));
+    s(a[1],a[2]);
+    printf("Next:%d", func(a,7));
+    return 0; 
+}
+```
+
+- s()的作用是将a[1]和a[2]的值交换
+
+
+
+
+
+<br>
+
 <br>
 
 <br>
@@ -2324,7 +2355,7 @@ int main()
 
 (这里把L1L2从下面指向头结点更好理解)
 
-#### 函数接口定义：
+**函数接口定义：**
 
 ```c++
 void ListUnion( List L1, List L2 )
@@ -2348,7 +2379,7 @@ typedef PtrToNode List;
 
 要求算法额外空间复杂度为O(1)，时间复杂度为O(n)。
 
-#### 裁判测试程序样例：
+**裁判测试程序样例：**
 
 ```c++
 #include <stdio.h>
@@ -2381,7 +2412,7 @@ int main()
 /* 你的代码将被嵌在这里 */
 ```
 
-#### 输入样例：
+**输入样例：**
 
 ```
 4
@@ -2390,7 +2421,7 @@ int main()
 15 10 5 2
 ```
 
-#### 输出样例：
+**输出样例：**
 
 ```
 15 13 10 9 5 2
@@ -2460,7 +2491,7 @@ void ListUnion(List L1,List L2){
 
 给定一棵二叉搜索树 `T` 和一个整数`X`，要求编写函数，按**非递增序**打印出 `T` 中所有不小于 `X` 的元素。
 
-#### 函数接口定义：
+**函数接口定义：**
 
 ```c++
 void Print_NLT( Tree T, int X );
@@ -2477,7 +2508,7 @@ struct TreeNode {
 };
 ```
 
-#### 裁判测试程序样例：
+**裁判测试程序样例：**
 
 ```c++
 #include <stdio.h>
@@ -2511,25 +2542,23 @@ int main()
 /* 请在这里填写答案 */
 ```
 
-#### 输出样例1（针对图1）：
+**输出样例1（针对图1）：**
 
 ```out
 92 91 90 85 81 80 End
 ```
 
-![img](https://images.ptausercontent.com/91)
-**图 1**
+![函数题_不小于x的元素图一](assets/C语言 程序设计基础/函数题_不小于x的元素图一.png)
 
-#### 输出样例2（针对图2）：
+**输出样例2（针对图2）：**
 
 ```
 End
 ```
 
-![img](https://images.ptausercontent.com/92)
-**图 2**
+![函数题_不小于x的元素图二](assets/C语言 程序设计基础/函数题_不小于x的元素图二.png)
 
-### 代码：
+#### 代码：
 
 ```c++
 void Print_NLT( Tree T,  int X ){
@@ -2541,6 +2570,136 @@ void Print_NLT( Tree T,  int X ){
         printf("%d ",T->Element);
     }
     Print_NLT(T->Left,X);
+}
+```
+
+
+
+<br>
+
+
+
+### 3、二叉搜索树中的最近公共祖先 (8分)
+
+在一棵树`T`中两个结点`u`和`v`的最近公共祖先(LCA)，是树中以`u`和`v`为其后代的深度最大的那个结点。现给定某二叉搜索树(BST)中任意两个结点，要求你找出它们的最近公共祖先。
+
+**函数接口定义：**
+
+```c++
+int LCA( Tree T, int u, int v );
+```
+
+其中`Tree`的定义如下：
+
+```c++
+typedef struct TreeNode *Tree;
+struct TreeNode {
+    int   Key;
+    Tree  Left;
+    Tree  Right;
+};
+```
+
+函数`LCA`须返回树`T`中两个结点`u`和`v`的最近公共祖先结点的键值。若`u`或`v`不在树中，则应返回`ERROR`。
+
+**裁判测试程序样例：**
+
+```c++
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ERROR -1
+typedef struct TreeNode *Tree;
+struct TreeNode {
+    int   Key;
+    Tree  Left;
+    Tree  Right;
+};
+
+Tree BuildTree(); /* 细节在此不表 */
+int LCA( Tree T,  int u, int v );
+
+int main()
+{
+    Tree T;
+    int u, v, ans;
+
+    T = BuildTree();
+    scanf("%d %d", &u, &v);
+    ans = LCA(T, u, v);
+    if ( ans == ERROR ) printf("Wrong input\n");
+    else printf("LCA = %d\n", ans);
+
+    return 0;
+}
+
+/* 你的代码将被嵌在这里 */
+```
+
+**输入样例1 （对于下图给定的树）：**
+
+![函数题_二叉搜索树的最近公共祖先](assets/C语言 程序设计基础/函数题_二叉搜索树的最近公共祖先.png)
+
+```
+2 7
+```
+
+**输出样例1：**
+
+```out
+LCA = 6
+```
+
+**输入样例2 （对于例1中的树）：**
+
+```in
+1 9
+```
+
+**输出样例2：**
+
+```
+Wrong input
+```
+
+#### 代码
+
+```c
+// 判断树T中是否有值为x的结点
+int fd(Tree T, int x) {
+    if (!T)
+        return 0;
+    if (T->Key == x)
+        return 1;
+    
+    // 递归左右子树
+    if (T->Key < x)
+        return fd(T->Right, x);
+    if (T->Key > x)
+        return fd(T->Left, x);
+}
+
+// 找到最近的公共祖先
+int LCA(Tree T, int u, int v) {
+    // 树本身为空或者树中没有uv都是error的情况
+    if (!T)
+        return ERROR;
+    if ((!fd(T, u)) || (!fd(T, v)))
+        return ERROR;
+    
+    // 根结点就是uv中的一个的情况 根就是结果
+    if ((u == T->Key) || (v == T->Key))
+        return T->Key;
+    
+    // uv在根节点的两侧 根就是结果
+    if ((u > T->Key && v < T->Key) || (u < T->Key && v > T->Key))
+        return T->Key;
+    
+    // 说明uv都在左边或者右边，就对左或右子树进行递归
+    if (u > T->Key)
+        return LCA(T->Right, u, v);
+    if (u < T->Key)
+        return LCA(T->Left, u, v);
 }
 ```
 
