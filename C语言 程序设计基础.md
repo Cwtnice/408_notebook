@@ -2547,9 +2547,154 @@ int main(){
 
 ## 2016
 
-4-4 给定一棵树的先序遍历序列为 { 1 2 3 4 6 7 5 }，后序遍历序列为 { 2 6 7 4 5 3 1 }，建树
+### 4-4 先序中序建树
+
+给定一棵树的先序遍历序列为 { 1 2 3 4 6 7 5 }，后序遍历序列为 { 2 6 7 4 5 3 1 }，建树
 
 ![2016_4-4](assets/C语言 程序设计基础/2016_4-4.PNG)
+
+
+
+<br>
+
+
+
+### 5-1 约瑟夫环问题
+
+一群猴子要选新猴王。新猴王的选择方法是：让 `n` 只候选猴子围成一圈，从某位置起顺序编号为 1~`n` 号。从第 1 号开始报数（从 1 到 4），凡报到 4 的猴子即退出圈子，接着又从紧邻的下一只猴子开始同样的报数。如此不断循环，最后剩下的一只猴子就选为猴王。以下程序采用单循环链表模拟了这个过程，`KingOfMonkey` 函数返回猴王编号。请在空缺处填上正确的代码。
+
+```c++
+// 约瑟夫环问题
+
+typedef struct node    
+{   int number; /*猴子的编号*/
+    struct node *next; /*指向下一只猴子的指针*/
+} linklist;
+
+int steps = 4; /*报数到这个定数(正整数)，确定下一只出局的猴子*/
+linklist *CreateCircle(int n); /*创建有n个编号的无头结点单循环链表*/
+int KingOfMonkey(int n, linklist *head);
+
+int main()
+{   linklist *head;
+    int n;
+    scanf("%d",&n); 
+    if (n>0){    
+        head = CreateCircle(n);
+        printf("%d\n", KingOfMonkey(n,head));
+    }
+    return 0;
+}
+
+linklist *DeleteNext(linklist *p) /* 删除单循环链表的p所指的下一个结点 */
+{   linklist *s;
+    if ( p && p->next!=p ) { 
+        s=p->next;	// 此处为空
+        p->next = s->next;
+        free(s);  
+        return p->next;
+    }else if (p){             
+        free(p);  
+        return NULL;
+    }else 
+        return NULL;
+}
+
+int KingOfMonkey(int n,linklist *head)
+{   linklist *p = head;
+    int i, j;       
+    for(j=1; j<=n-1; j++){   
+        for(i=2; i<steps; i++)  p=p->next;
+        p=DeleteNext(p);	// 此处为空
+    }   
+    return p->number;	// 此处为空
+} 
+```
+
+
+
+
+
+<br>
+
+
+
+### 5-2 有理数加法
+
+假如有理数类型定义如下：
+
+```c++
+typedef struct
+{   int n; /*numerator,分子，允许是负数*/
+    int d; /*denominator，分母，大于0；且n和d没有大于1的公因子*/
+} RATIONAL;
+```
+
+下面是两个有理数的加法函数 `AddR()` 以及相关的另两个函数代码，请对程序填空。
+
+```c++
+unsigned int gcd( int x, int y); /*求最大公因子*/
+RATIONAL Simplify(RATIONAL a); /*有理数约简，如6/9约简为2/3*/
+RATIONAL AddR(RATIONAL a, RATIONAL b) /*有理数相加，如：1/2+2/3=7/6 */
+{   RATIONAL t;
+    a = Simplify(a); b = Simplify(b);
+    t.n = a.n*b.d+b.n*a.d;	// 此处为空
+    t.d = a.d * b.d;
+    return Simplify(t);
+}
+RATIONAL Simplify(RATIONAL a) /*化简有理数*/
+{   RATIONAL t;
+    int divisor = gcd(a.n, a.d);	// 此处为空
+    t.n =  a.n / divisor;
+    t.d = a.d / divisor;
+    return t;
+}
+unsigned int gcd(int x, int y) /*y>0; 求|x|与y的最大公因子*/
+{   int r;
+    if ( x < 0 ) x = -x;
+    while(1)
+    {   r = x % y;
+        if (r == 0) return y;
+        x = y;
+        y = r;	// 此处为空
+    }
+}
+```
+
+
+
+<br>
+
+
+
+### 5-3 拓扑排序
+
+下列代码的功能是对一个给定的图`G`执行拓扑排序，其中`TopNum[]`从 1 开始记录拓扑序。请完成程序填空。
+
+```c++
+void Topsort( Graph G )
+{   Queue Q;
+    Vertex V, W;
+    NodePtr ptr;
+    int counter = 0;
+    Q = CreateEmptyQueue(G->NumV); /*初始化队列*/
+    for ( V=0; V<G->NumV; V++ )
+        if ( Indegree[V] == 0 ) /*Indegree[V]记录V的入度*/
+            Enqueue(V, Q);
+    while ( !IsEmpty(Q) ){
+        V = Dequeue( Q );
+         TopNum[V] = ++counter;	// 此处为空
+        for ( ptr=G->List[V]; ptr; ptr=ptr->Next) {
+            W = ptr->Vert;
+            if (--Indegree[w]==0)	// 此处为空
+                Enqueue(W, Q);
+        }
+    }
+    if (count<G->NumV)	// 此处为空
+        printf("错误：此图存在环\n");
+    DisposeQueue(Q);
+}
+```
 
 
 
