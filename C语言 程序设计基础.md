@@ -158,6 +158,8 @@ for(int i = 0; i < strlen(str); i++){
 
 - 简单记： `！> 算术运算符 > 关系运算符 > && > || > 赋值运算符`
 
+- 成员选择比++高， `*p++` 先*再++
+
     
 
 
@@ -991,14 +993,14 @@ node* p = new LinkNode(x);
 
     
 
-8. 对于下列数组 `a`, 能正确输出 1~6 某个值的语句是 **A**
+8. 【878，2017】对于下列数组 `a`, 能正确输出 1~6 某个值的语句是 **A**
 
     ```C
     int a[3][2]={1,2,3,4,5,6};
     
-    A. printf("%d", *(a[1]+3));	// 等效于a[1][3]
-    B. printf("%d", a[1]+3);	// 等效于&a[1][3]
-    C. printf("%d", *(a[3]+1));	// 等效于a[3][1], 3就是非法的
+    A. printf("%d", *(a[1]+3));	// a[1][3]的值
+    B. printf("%d", a[1]+3);	// a[1][3]的地址
+    C. printf("%d", *(a[3]+1));	// a[3][1]的值, 但是非法
     D. printf("%d", a[3]+1);
     ```
 
@@ -1035,7 +1037,7 @@ node* p = new LinkNode(x);
 
     
 
-11. 对于数组 `int a[3][2]`，哪个能正确访问到 `a` 中的元素？**A**
+11. 【878，2018】对于数组 `int a[3][2]`，哪个能正确访问到 `a` 中的元素？**A**
 
     ```c
     A. a[-1][3]
@@ -1045,11 +1047,11 @@ node* p = new LinkNode(x);
     ```
     
     - 对于二维数组 `int a[M][N]` 来说，`arr[i][j]` 的地址是 `(*arr) + i*N + j`，其值就再加一个*
-    - 因此A选项 `a[-1][3]` 相当于a+1，也就是第二个元素，也就是相当于 `a[0][1]`
+    - 因此A选项 `a[-1][3]` 相当于a+1的值，也就是第二个元素的值，也就是相当于 `a[0][1]`
 
     
 
-12. 如果 `int a[5], *p = &a[2];`，那么哪个与 `p[1]` 等价？ **a[3]**
+12. 【878，2018】如果 `int a[5], *p = &a[2];`，那么哪个与 `p[1]` 等价？ **a[3]**
 
         p指向的是a[2]的地址，故p[1]为*p+1, 指向a[3]
 
@@ -1057,37 +1059,38 @@ node* p = new LinkNode(x);
 
 13. 对于定义 `char *s, str[10]= "hello";`，下面哪个语句是正确的？ **C**
 
-        ```
-        A. strcpy(s, str);
-        B. str=s;
-        C. printf("%s", str+2);
-        D. s=str[0];
-        ```
+    ```c
+    A. strcpy(s, str);
+    B. str=s;
+    C. printf("%s", str+2);
+    D. s=str[0];
+    ```
 
 14. 下列程序的输出结果为：`abc:9:3`
 
-         ```c
-         char s[]="abc\0d123";
-         printf("%s:%d:%d", s, sizeof(s), strlen(s));
-         ```
-         
-         - 字符串以 `\0` 作为结尾
-         - sizeof为总空间+1，也就是8+1=9，`\0` 占一个空间
-         - strlen遇到 `\0` 停止
+    ```c
+    char s[]="abc\0d123";
+    printf("%s:%d:%d", s, sizeof(s), strlen(s));
+    ```
+    
+     - 字符串以 `\0` 作为结尾
+     - sizeof为总空间+1，也就是8+1=9，`\0` 占一个空间
+     - strlen遇到 `\0` 停止
 
 
-     ​    
 
-15. 对于下面的定义，++p->c的值是多少？ `'b'`
+15. 【878，2018】对于下面的定义，++p->c的值是多少？ `'b'`
 
-        ```c++
-        struct S{
-             int n;
-             char c;
-        } st[5] = {1,'A',2,'a',3,'B',4,'b'}, *p = st+1;
-        ```
-        
-        - 取成员的优先级比++高，p就是st[1]，取成员的结果是 `'a'` ，再++得到结果
+    ```c
+    struct S{
+         int n;
+         char c;
+    } st[5] = {1,'A',2,'a',3,'B',4,'b'}, *p = st+1;
+    ```
+
+    - 取成员的优先级比++高，p就是st[1]，取成员的结果是 `'a'` ，再++得到结果
+
+    
 
 16. 下列表达式哪个是无意义的？ `A`
 
@@ -1210,6 +1213,23 @@ node* p = new LinkNode(x);
     ```
 
     - A选项为2的地址，B选项为1，C选项为1的地址+1，D选项为正确选项。
+    
+    
+    
+25. 【878，2017】 `while (!x&&!y)` 语句中的表达式 `!x&&!y` 等价于 **B**
+
+    ```C
+    A. x=0 && y=0
+    B. !(x || y)
+    C. !( x==0 || y==0)
+    D. !( x==0 && y==0)
+    ```
+
+    - 只有x和y都是0，表达式的值才为1，只有B满足
+
+    
+
+26. 
 
 
 
@@ -2155,7 +2175,7 @@ fprintf(fp, "%d%f", n, x);
 
 7. 缓冲文件系统和非缓冲文件系统的区别： **系统是否为文件自动分配一块文件缓冲区（内存单元）**
 
-8. 想以可读可写而不清空原文件的方式打开 `D` 盘中的一个文件 `abc.txt`，下面函数调用正确的是 **C**
+8. 【878，2017】想以可读可写而不清空原文件的方式打开 `D` 盘中的一个文件 `abc.txt`，下面函数调用正确的是 **C**
 
     ```c
     A. fopen("D:\user\abc.txt","r+");
@@ -2183,7 +2203,7 @@ fprintf(fp, "%d%f", n, x);
 
     
 
-10. 如果函数 `void fcopy( FILE *t, FILE *s )` 将文件 `s` 的内容拷贝到 `t`，则下面哪个是正确的调用？ `C`
+10. 【878，2018】如果函数 `void fcopy( FILE *t, FILE *s )` 将文件 `s` 的内容拷贝到 `t`，则下面哪个是正确的调用？ `C`
 
     ```c
     FILE *fp1, *fp2;
@@ -2197,6 +2217,7 @@ fprintf(fp, "%d%f", n, x);
     ```
 
     - 这题的意思就是看看哪个不报错
+    - fcopy() 将第二个参数的内容拷贝到第一个参数
     - stdin是读，stdout是写，fp1是只读，fp2是新建，写
     - 只有c是不报错的
 
@@ -2715,6 +2736,43 @@ void Topsort( Graph G )
 
 
 
+## 2017
+
+### 5-2 堆排序
+
+```c++
+#define leftchild(i) ( 2*(i)+1 )
+void PercDown( ElementType A[], int i, int N )
+{  int child;
+   ElementType Tmp;
+   for ( Tmp = A[i]; leftchild(i) < N; i = child ) {
+      child = leftchild(i);
+      if ((child+1 <= N-1)&&(A[child]<A[child + 1]))	// 此处为空
+         child ++;
+      if (Tmp < A[child])	// 此处为空
+          A[i] = A[child];
+      else  break;
+   }
+   A[i] = Tmp;
+}
+
+void Heapsort( ElementType A[ ], int N ) 
+{  int i; 
+   for ( i = N/2; i >= 0; i -- ) 
+        PercDown( A, i, N ); 
+   for ( i = N-1; i > 0; i -- ) { 
+        Swap( &A[0], &A[i] ); 
+       	PercDown( A, 0, i ); 	// 此处为空
+   } 
+}
+```
+
+
+
+<br>
+
+
+
 ## 2018
 
 4-3 运行下列程序后输出是： `u#ience#5#4`
@@ -2771,11 +2829,102 @@ int main()
 
 
 
+### 4-5 后序中序建树
+
+给定一棵二叉树的后序遍历结果是 { 6, 5, 8, 2, 9, 1, 7, 3, 4 }，中序遍历结果是 { 6, 5, 1, 2, 8, 9, 4, 3, 7 }。
+
+
+
+<br>
+
+
+
+### 5-1 删除链表中的逆序结点
+
+有关链表结构定义：
+
+```c
+typedef struct node {
+    int data;
+    struct node *next;
+} NodeT;
+```
+
+下列函数将不带头结点的单链表中的逆序结点删除，形成从小到大的非递减序列。例如：若当前链表 h 为 3->5->2->6->1->4->7，将删除逆序结点 2、1、4，形成链表 3->5->6->7。
+
+```c++
+NodeT *order( NodeT *h )
+{  
+    NodeT *p, *t;
+
+    p = h;
+    while ( p!=NULL ) {
+        t = p->next;
+        if (t == NULL) break;	// 此处为空
+        else if ( p->data <= t->data ) 
+             p = p->next;	// 此处为空
+        else {
+            p->next = t->next;	// 此处为空
+            free(t);
+        }
+    }
+    return h;
+}
+```
+
+
+
+<br>
+
+
+
+### 5-2 求任意两点的最短路径
+
+函数 `SP` 用于求给定图 `Graph` 中任意两点间的最短路径。二维数组 `Graph->G` 存放的是图的邻接矩阵，`D` 用于保存最短路径长度（即 `D[i][j]` 保存顶点 `i` 到 `j` 之间的最短路径长度），`Path` 用于存储路径。图类型 `MGraph` 的定义如下：
+
+```c
+typedef struct GNode *PtrToGNode;
+struct GNode{
+	int Nv;  /* 顶点数 */
+	int Ne;  /* 边数   */
+	WeightType G[MaxVertexNum][MaxVertexNum]; /* 邻接矩阵 */
+};
+typedef PtrToGNode MGraph; /* 以邻接矩阵存储的图类型 */
+```
+
+请完成程序填空。
+
+```c
+void SP( MGraph Graph, WeightType D[][MaxVertexNum], Vertex Path[][MaxVertexNum] )
+{
+    Vertex i, j, k;
+
+    for ( i=0; i<Graph->Nv; i++ )
+        for( j=0; j<Graph->Nv; j++ ) {
+            D[i][j] = Graph->G[i][j];
+            Path[i][j] = -1;
+        }
+    for( k=0; k<Graph->Nv; k++ )
+        for( i=0; i<Graph->Nv; i++ )
+            for( j=0; j<Graph->Nv; j++ )
+                if(D[i][k]+D[k][j]<D[i][j]) {	// 此处为空
+                    D[i][j] = D[i][k]+D[k][j]; 	// 此处为空
+                    Path[i][j] = k;	// 此处为空
+                }
+}
+```
+
+
+
+<br>
+
+
+
 ## 2019
 
 4-1 下列程序的输出结果是 `  -5, -12,  -7`
 
-```
+```c
 void sub(int x, int y, int *z)
 {   *z =*z + y - x;   }
 
@@ -2823,6 +2972,104 @@ int main()
 顶点序列：2、4、3、6、5、7；
 
 距离序列：5、7、11、17、18、20。
+
+
+
+<br>
+
+
+
+### 5-1 字符串加密
+
+对一段明文（字符串）`s`，采用换位法进行加密的方法是：密钥是一个 `k`（≤20）个元素的整数数组，所有元素是正整数 1 至 `k` 的一个任意排列，根据密钥，以 `k` 个字符为一段，依次替换为秘钥指定的顺序。比如：如果秘钥数组为 `[1,3,2,5,4]`，明文 `abcdefghij01234`，则将明文分为 `abcde`、`fghij`、`01234` 三段，将每段按照 `12345` 顺序转换为秘钥指定的顺序 `13254`, 因此得到的三段密文为：`acbed`、`fhgji`、`02143`。因此，最后所得密文为：`acbedfhgji02143`。
+
+（1）下列函数 `move()` 将字符串 `s` 从 `start` 位置开始的 `k` 个字符转换为秘钥 `key` 规定的顺序,请将函数空缺部分填写完整。
+
+```c++
+void move(char s[],int start, int k, int *key)
+{   char t[20];
+    int i;
+    for (i=0;i<k;i++)    t[i]= s[start+ key[i] -1];	// 此处为空
+    for (i=0;i<k;i++)    s[start+i]=t[i];	// 此处为空
+} 
+```
+
+（2）下列函数 `cryptoText()` 调用上述 `move()` 函数，将字符串 `s` 按照每 `k` 个字符一段进行换位加密，采用的秘钥为 `key`，假设 `s` 的长度是 `k` 的倍数。同时在 `main()` 中通过具体的 `s` 和 `key` 调用 `cryptoText()` 进行测试。请正确填写其中两次函数调用的调用参数。
+
+```c++
+void cryptoText(char *s, int k, int *key)
+{   int i;
+    for (i=0;s[i]!='\0';i=i+k)
+        move(s,i,k,key);	// 此处为空
+}
+
+int main()
+{   char s[]="abcdefghijk0123";
+    int key[]={1,3,2,5,4};
+    cryptoText(s,5,key);    	// 此处为空
+ 	printf("%s\n",s);
+    return 0;
+}
+```
+
+
+
+<br>
+
+
+
+### 5-2 级数求和
+
+用 `sin(x)=x−(x^3/3!)+(x^5/5!)−(x^7/7!)+⋯` 计算 sin(*x*) 的值，直到最后一项的绝对值小于 10^−5^ 时为止，输出 sin(*x*) 的值并统计累加的项数。请将函数空缺部分填写完整。
+
+```c++
+int main()
+{   int n=1,count=1;
+    float x;
+    double sum, term;
+    scanf("%f", &x );
+    sum=x;
+    term=x;
+    do {
+        term = -term*((x*x)/((n+1)*(n+2)));	// 此处为空
+        sum = sum+term;
+        n = n+2;
+        count++;	//  此处为空
+    } while (fabs(term)>=1e-5);	// 此处为空
+    printf("sin(%f)=%f, total term#: %d\n",x,sum,count);
+    return 0;
+}
+```
+
+
+
+<br>
+
+
+
+5-3 调整为最大堆
+
+```c++
+#define leftchild(i) ( 2*(i)+1 )
+
+void BuildMaxHeap( ElementType A[], int N )
+{  int i, j, child;
+   ElementType Tmp;
+
+   for ( i = (N-1)/2; i >= 0; i-- ) {
+      j = i;
+      for ( Tmp = A[j]; leftchild(j) < N; j = child ) {
+         child = leftchild(j);
+         if (A[child] < A[child+1])	// 此处为空
+            child ++;
+         if (Tmp < A[child])	// 此处为空
+             A[j] = A[child];
+         else  break;
+      }
+      A[j] = Tmp;	// 此处为空
+   }
+}
+```
 
 
 
@@ -2879,13 +3126,50 @@ int main()
 
 <br>
 
+
+
+### 5-3 括号匹配
+
+```c++
+int Match( char expr[] ) 
+{   char Stack[MAXS];
+    int top;
+    int i, ret;
+    top = -1; i = 0; ret = 1;
+        while (expr[i]!='\0') {
+        if (expr[i]=='(' || expr[i]=='[')
+            Stack[++top]=expr[i];	// 此处为空
+        else if (expr[i]==')' || expr[i]==']') {
+            if (top==-1)  { 	// 此处为空
+                ret = 0; break; 
+            }
+            else  {
+                if  ((Stack[top]=='(' && expr[i]!=')') 
+                      || (Stack[top]=='[' && expr[i]!=']')) { 
+                    ret = 0; break; 
+                }
+                else
+                    top--;	// 此处为空
+            }
+        }
+        i++;
+    }
+    if (top!=-1)  ret = 0;
+    return ret;
+}
+```
+
+
+
+<br>
+
 <br>
 
 <br>
 
 # 函数题
 
-### 1、有序链表的并集与去重 (9分)
+### 2016、有序链表的并集与去重 (9分)
 
 给定两个带头结点的严格降序的链表 `L1` 和 `L2`，要求你求两个链表的并集，其中元素仍然严格降序排列，且必须排除重复元素；重复的元素必须链成另一个降序排列的链表。完成去重合并后，并集链表的表头为 `L1`，重复元素链表的表头为 `L2`。
 
@@ -3027,7 +3311,7 @@ void ListUnion(List L1,List L2){
 
 
 
-### 2、二叉搜索树中不小于X的元素（8分）
+### 2017、二叉搜索树中不小于X的元素（8分）
 
 给定一棵二叉搜索树 `T` 和一个整数`X`，要求编写函数，按**非递增序**打印出 `T` 中所有不小于 `X` 的元素。
 
@@ -3119,7 +3403,7 @@ void Print_NLT( Tree T,  int X ){
 
 
 
-### 3、二叉搜索树中的最近公共祖先 (8分)
+### 2018、二叉搜索树中的最近公共祖先 (8分)
 
 在一棵树`T`中两个结点`u`和`v`的最近公共祖先(LCA)，是树中以`u`和`v`为其后代的深度最大的那个结点。现给定某二叉搜索树(BST)中任意两个结点，要求你找出它们的最近公共祖先。
 
@@ -3249,7 +3533,7 @@ int LCA(Tree T, int u, int v) {
 
 
 
-### 4、重排链表（8分）
+### 2020、重排链表（8分）
 
 给定一个非空的、至少有 2 个结点的链表 `L→L1→L2→...→Ln−1→Ln` ，要求你编写函数 `List Rearrange( List L )`，将链表重新排列为 `L→Ln→L1→Ln−1→L2→...`
 
