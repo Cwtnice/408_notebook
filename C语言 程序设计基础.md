@@ -224,6 +224,28 @@ int a[10] = {1, 2};	// a[0]的值是1, a[1]的值是2，其余元素默认是0
 
 
 
+**一维数组和指针：**
+
+```c
+int *p;
+int a[10];
+ 
+P = a;    //表示数组首元素的首地址, 等同于&a[0]; 类型匹配,左右两边都是int*型
+p = &a;	  //类型不匹配。p的类型是是int*而&a的类型是是int (*)[10] (指向int数组的指针，也即指向整个数组的首地址)
+p = &a[0];    //类型匹配
+```
+
+- a数组名，只能做右值，表示数组元素的首地址，也就是a[0]的首地址
+- a[0]，数组的第一个元素，做左值表示第0个元素对应的内存空间，做右值表示第0个元素的值
+- &a，常量，只能做右值，表示整个数组的首地址
+- &a[0]，[]的优先级要高于&，所以a先和[]结合再取地址，&a[0]做右值时等同于a，表示数组首元素的地址，但是意义不相同
+
+
+
+<br>
+
+
+
 **二维数组：**
 
 ```c
@@ -242,21 +264,15 @@ int a[4][3] = {1, 2, 3, 0, 0, 0, 4, 5};
 
 <br>
 
-1. **错误** a[1][2]是一行两列
 
-    ```c
-    int a[1][2] = {{1},{3}};
-    ```
 
-    
-
-2. 可以在赋值语句中通过赋值运算符=对字符数组整体赋值 **错误**
+1. 可以在赋值语句中通过赋值运算符=对字符数组整体赋值 **错误**
 
     在赋值语句中通过赋值运算符"="对字符数组整体赋值，则就需要用到字符数组名，而对字符数组名进行操作时其会退化为常量指针，而进行赋值时左值必须是可以修改的变量。
 
     **初始化可以，赋值不行**
 
-3. 
+2. 
 
 
 
@@ -319,18 +335,6 @@ Loc(a[i][j]) = 首地址 + [已经满多少列 + 当前行数] * 每个元素多
 *((*a+3)+1)  就是*(*a+4) 就是a[0][4]
 *(*(a+2)+3)  a[2][3]
 ```
-
-
-
-<br>
-
-
-
-**对于指向二维数组的指针**
-
-如果建立一个这样的指针 `int *p = a` 
-
-后面再补充
 
 
 
@@ -452,7 +456,9 @@ int b = strlen(str);    // 7
     D. char *s; s=(char *)malloc(10); strcpy(s,"abc123");
     ```
 
-    解释：
+    - a中字符串常量是单独有空间存储的
+    - b是局部变量，函数返回的指针所指向的是栈内。而栈内空间在函数调用结束后就被重新利用了，即你指针所指的空间内的数据可能被覆盖或者清空了
+    - cd动态分配
 
     
 
@@ -486,7 +492,14 @@ int b = strlen(str);    // 7
 
     
 
-6. 
+6. 【878，2016】设有以下语句，则变量 `c` 的十进制数是： `char a = 3, b = 6, c; c = a^b<<4-2;` **27**
+
+    ```
+    运算符优先级应该是减大于左移大于异或，a是0011，b是0110，b先左移两位变为011000，再和a异或得到11011，也就是27
+    ```
+
+7. 
+
 
 
 
@@ -764,6 +777,9 @@ p = &s1;
 (*p).num = 28;	// *p表示p指向的结构变量, 点的优先级高于*, 因此需要括号
 p->num = 28;
 ```
+
+- 对象或结构体用 `.`
+- 指针用 `->` 
 
 
 
@@ -1563,11 +1579,15 @@ do{
 
 定义在函数内部的变量称为 **局部变量** ，有效作用范围只在函数内部，形参是局部变量
 
-定义在main()中的变量也是局部变量，作用域只在main()中
+- 定义在main()中的变量也是局部变量，作用域只在main()中，只不过它的生命周期和全局变量一样长而已
 
 定义在函数外的称为 **全局变量** ， 有效作用范围是从定义到程序的结束，对范围内的所有函数都起作用
 
-当局部变量和全局变量重名时，在局部以局部变量为主
+- 当局部变量和全局变量重名时，在局部以局部变量为主
+
+    
+
+
 
 
 
@@ -1634,8 +1654,8 @@ void func(void){
 
 保存变量的数据区分为：
 
-- 动态存储区（堆栈）：保存自动变量（局部变量）
-- 静态存储区：保存全局变量、静态局部变量
+- 动态存储区（堆栈）：保存自动变量（局部变量），如果不对它们进行初始化，那么他们可能是任意的随机值
+- 静态存储区：保存全局变量、静态局部变量，他们在分配的时候都被系统默认初始化为0
 
 
 
@@ -1764,7 +1784,23 @@ void func(void){
     - B 选项 不能把 `char*` 类型赋值给字符数组
     - C选项 t+1是 `bc` ，`*(t+1)` 是b
 
-9. 
+    
+
+9. 【878，2017】对于下列递归函数, 调用 `f(16)` 后的输出结果是 `121`
+
+    ```c
+    void f(int x) {
+        if (x==0) 
+            return;
+        else {
+            f(x/3); 
+            printf("%d",x%3); 
+        }
+    }
+    ```
+
+    - f(16)变为f（5） + 1，再变为f(1)+21，再变为121
+
 
 
 
@@ -3047,7 +3083,7 @@ int main()
 
 
 
-5-3 调整为最大堆
+### 5-3 调整为最大堆
 
 ```c++
 #define leftchild(i) ( 2*(i)+1 )
@@ -3661,31 +3697,522 @@ List Rearrange( List L ){
 
 
 
+<br>
 
 
-#### 关于字符串和转义字符
 
-```c
+### 关于字符串和转义字符
+
+编译时出现错误，以下叙述中正确的是 **D**
+
+```
 void main(){
 	char a, b, c, *p;
-	a=’\’; b=’\xbc’; c=’\0xab’; p=”\0127”;
+	a='\'; b='\xbc'; c='\0xab'; p="\0127";
 	printf(“%c %c %c %c\n”, a, b, c, *p);
+}
+
+A. 程序中只有a='\';语句不正确
+B. b='\xbc';语句不正确
+C. p="\0127";语句不正确
+D. a='\';和c='\0xab';语句都不正确
+```
+
+- a少一个单引号，错误
+- 关于b和c，转义字符\h、\hh、\hhh斜杠后面的是1-3位八进制数，该转义字符为ASCII码等于该值的字符；转义字符\xh、\xhh的\x后面的是1-2位十六进制数，该转义字符为ASCII码等于该值的字符。所以b= ‘\xbc’是对的，相当于b=0xbc，
+- c= ‘\0xab’是错的，没有这个表示方法。
+- p=“\0127”是对的，这里\012是一个转义字符，相当于八进制的12，查ASCII表可知是换行符\n，所以p相当于p= “\n7”。所以a和c变量是错的，答案选D。
+
+
+
+
+
+
+
+二叉树两个结点之间的最远距离称为二叉树的直径，求直径
+
+直径 = max(左树深度+右树深度)
+
+```c
+int GetTreeHeight(tree root, int &ans){
+    if(!root) return 0;
+    
+    int leftheight = GetTreeHeight(root->left, ans);
+    int rightheight = GetTreeHeight(root->right, ans);
+    
+    ans = max(leftheight+leftheight, ans);
+    
+    return max(leftheight + leftheight) + 1;
+}
+
+int FindRadOfTree(tree root){
+    int ans = 0;
+    GetTreeHeight(root, ans);
+    return ans;
 }
 ```
 
-编译时出现错误，以下叙述中正确的是（）
-A. 程序中只有a=’\’;语句不正确
-B. b=’\xbc’;语句不正确
-C. p=”\0127”;语句不正确
-D. a=’\’;和c=’\0xab’;语句都不正确
 
-答案是D，不知道为什么，于是又去复习了一下c语言的转义字符。常用的c语言转义字符如下表所示：
 
-这道题里a= ‘\’是不正确的，必须是a= ‘\\’,因为\标识转义字符，如果是 ‘\’,那\’就会被当做转义字符，字符会缺一个单引号，语法错误，需要后面再加个单引号，如a= ‘\”，但这样得到的字符就是\’了。关于b和c，转义字符\h、\hh、\hhh斜杠后面的是1~3位八进制数，该转义字符为ASCII码等于该值的字符；转义字符\xh、\xhh的\x后面的是1~2位十六进制数，该转义字符为ASCII码等于该值的字符。所以b= ‘\xbc’是对的，相当于b=0xbc，也即十进制的-68，虽然这个数对于ASCII字符没有意义，但作为char的数值是没有错的（char是带符号八位整形，取值范围为-128~127）；c= ‘\0xab’是错的，没有这个表示方法。p=“\0127”是对的，这里\012是一个转义字符，相当于八进制的12，查ASCII表可知是换行符\n，所以p相当于p= “\n7”。所以a和c变量是错的，答案选D。
+二叉树采用二叉链表表示，输出二叉树中最长的根路径
+
+计算深度同时记录最深的结点，用非递归先序遍历找到p，此时路径都在栈中
 
 
 
+给定一个整数x，以及一个可能的查找的关键字序列{K[0],..., K[N-1]}，请设计算法判别一个序列是否是一个可能的二叉排序树上进行的查找序列。（例如:{1,4,2,3}就是查找3的序列，对应二叉排序树如图。而{2,4,1,3}就不可能是。)要求算法时间复杂度为O(N)。
 
+先构造树，再判断是否是bst
+
+
+
+
+
+给定链表表示的二叉树,判断其是否为完全二叉树。
+答案1:使用队列，在遍历中利用完全二叉树“若某结点无左子女就不应有右子女”的原则进行判断。
+
+
+
+```
+bool JudgeComplete(BiTree T){ 
+	if(!T) return true;
+	Queueln(Q,T);//初始化队列，根结点指针入队
+	while (!QueueEmpty(Q)){
+		T=QueueOut(Q);//出队
+		if (T->lchild && !tag) 
+			QueueIn(Q,T->lchild);	// 左子女入队
+		else if 
+			(T->lchild) return flase;
+			//前边已有结点为空，本结点不空
+		else tag=1;//首次出现结点为空
+        if (T->rchild && !tag) Queueln(Q,T->rchild);	//右子女入队
+        else if (T->rchild) return false;
+        else tag=1;
+    }
+	return true;
+}
+```
+
+
+
+给定n个村庄之间的交通图，若村庄i和j之间有道路，则将顶点i和j用边连接,边上的Wij表示这条道路的长度,现在要从这n个村庄中选择一个村庄建一所医院,问这所医院应建在哪个村庄,才能使离医院最远的村庄到医院的路程最短?
+
+答案:
+·先用Floyd求任意2点间最短路;
+·对每个村庄,求它到其他村庄的最短路中最长的;·找所有n条最长路中最短的，那个村庄就建医院。
+
+
+
+给定现有城镇道路统计表,表中列出了每条道路直接连通的城镇以及距离。现有一镇受灾，指定另一镇救援,要求设计算法使得救援队以最快速度到达。另外，救援队每经过一镇，可以得到一个单位的救援物资。要求在最快到达的同时带去最多的救援物资。
+
+```
+修改Dijkstra:
+if(T[v].Dist + Cvw < T[w].Dist ) i
+Decrease( T[w].Dist to T[v]+Cvw)T[w].Path = v;
+T[w].Count = T[v].Count + 1;
+}
+else if( ( T[v].Dist + Cvw ==T[w].Dist )
+&& ( T[v].Count + 1 >T[w].Count ) ) {T[w].Count = T[v].Count + 1;
+T[w].Path = v; /* DO NOT forget this *l
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 程序填空题：
+
+### 计算给定二叉树的宽度
+
+下列代码的功能是计算给定二叉树`T`的宽度。二叉树的宽度是指各层结点数的最大值。函数`Queue_rear`和`Queue_front`分别返回当前队列`Q`中队尾和队首元素的位置。
+
+```c++
+typedef struct TreeNode *BinTree;
+struct TreeNode
+{
+   int Key;
+   BinTree  Left;
+   BinTree  Right;
+};
+ 
+int Width( BinTree T )
+{
+   BinTree  p;
+   Queue Q;
+   int Last, temp_width, max_width;
+ 
+   temp_width = max_width = 0;
+   Q = CreateQueue(MaxElements);
+   Last = Queue_rear(Q);
+   if ( T == NULL) return 0;
+   else {
+      Enqueue(T, Q);
+      while (!IsEmpty(Q)) {
+         p = Front_Dequeue(Q); 
+         temp_width++;(3分);	// 此处为空 
+         if ( p->Left != NULL )  Enqueue(p->Left, Q);
+         if ( p->Right != NULL ) Enqueue(p->Right, Q);(3分);	// 此处为空  
+         if ( Queue_front(Q) > Last ) {
+            Last = Queue_rear(Q);
+            if ( temp_width > max_width ) max_width = temp_width;
+            	temp_width = 0;(3分);	// 此处为空
+         } 
+      } 
+      return  max_width;
+   } 
+} 
+```
+
+
+
+<br>
+
+
+
+本题要求编写函数实现带头结点的单链线性表的就地逆置操作函数。L是一个带头结点的单链表，函数ListReverse_L(LinkList &L)要求在不新开辟节点的前提下将单链表中的元素进行逆置，如原单链表元素依次为1,2,3,4，则逆置后为4,3,2,1。
+
+```c++
+void ListReverse_L(LinkList &L)
+{
+    LNode *res, *temp;
+    res = L->next;
+    temp = L->next;
+    L->next = NULL;
+    while(temp != NULL)
+    {
+        temp = res->next;
+        res->next = L->next;
+        L->next = res;
+        res = temp;
+    }
+}
+```
+
+
+
+<br>
+
+
+
+**7-2 两个有序链表序列的交集 (20 分)**
+
+已知两个非降序链表序列S1与S2，设计函数构造出S1与S2的交集新链表S3。
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+ 
+typedef int ElemType;
+struct LNode
+{
+    ElemType data;
+    LNode *next;
+    LNode(int data = 0, LNode *next = NULL) : data(data), next(next) {}
+};
+typedef LNode *LinkList;
+ 
+void InitList(LinkList &link)
+{
+    link = new LNode();
+    return ;
+}
+ 
+void InsertList(LinkList a, LinkList b, LinkList un)
+{
+    LinkList t = un;
+    while(a && b)
+    {
+        if(a->data == b->data)
+        {
+            un->next = a;
+            b = b->next;
+            a = a->next;
+            un = un->next;
+            un->next = NULL;
+        }
+        else if(a->data < b->data)
+            a = a->next;
+        else if(b->data < a->data)
+            b = b->next;
+    }
+    return ;
+}
+ 
+void Delete(LinkList a)
+{
+    LNode *temp = a->next;
+    while(temp)
+    {
+       LNode *t = temp;
+       temp = temp->next;
+       delete t;
+    }
+}
+ 
+int main()
+{
+    ios::sync_with_stdio(false);
+    LinkList Link_a, Link_b, Link_insert;
+    InitList(Link_a);
+    InitList(Link_b);
+    InitList(Link_insert);
+    LNode *a = Link_a, *b = Link_b, *un = Link_insert;
+    int x;
+    while(cin >> x && x != -1)
+    {
+        LNode *p = new LNode(x);
+        a->next = p;
+        a = a->next;
+    }
+ 
+    while(cin >> x && x != -1)
+    {
+        LNode *p = new LNode(x);
+        b->next = p;
+        b = b->next;
+    }
+ 
+    a = Link_a->next;
+    b = Link_b->next;
+    InsertList(a, b, un);
+ 
+    LNode *temp = Link_insert;
+    Link_insert = Link_insert->next;
+    if(Link_insert)
+    {
+        while(Link_insert)
+        {
+            if(Link_insert->next != NULL)
+                cout << Link_insert->data << " ";
+            else
+                cout << Link_insert->data << endl;
+            Link_insert = Link_insert->next;
+        }
+    }
+    else
+        cout << "NULL" << endl;
+ 
+    Delete(Link_a);
+    Delete(Link_b);
+    //Delete(temp);
+    return 0;
+}
+ 
+```
+
+
+
+<br>
+
+
+
+7-1 是否同一棵二叉搜索树 (25 分)
+
+给定一个插入序列就可以唯一确定一棵二叉搜索树。然而，一棵给定的二叉搜索树却可以由多种不同的插入序列得到。例如分别按照序列{2, 1, 3}和{2, 3, 1}插入初始为空的二叉搜索树，都得到一样的结果。于是对于输入的各种插入序列，你需要判断它们是否能生成一样的二叉搜索树。
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+ 
+struct node
+{
+    int data;
+    node *lchild, *rchild;
+    node(int data = 0, node *lchild = nullptr, node *rchild = nullptr) : data(data), rchild(rchild), lchild(lchild) {}
+};
+typedef node *Root;
+typedef node *Node;
+int N, L;
+int a;
+ 
+Node &Find(int data, Node &treenode)
+{
+    if(treenode == nullptr)
+        return treenode;
+ 
+    if(data < treenode->data)
+        return Find(data, treenode->lchild);
+ 
+    if(data > treenode->data)
+        return Find(data, treenode->rchild);
+}
+ 
+void dfs(Node treenode)
+{
+    if(treenode == nullptr)
+        return ;
+    dfs(treenode->lchild);
+    printf("%d\n", treenode->data);
+    dfs(treenode->rchild);
+}
+ 
+Root buildtree()
+{
+    scanf("%d", &a);
+    Root root = new node(a);
+    for(int i = 1; i < N; i++)
+    {
+        scanf("%d", &a);
+        Node &treenode = Find(a, root);
+        treenode = new node(a);
+    }
+    return root;
+}
+ 
+void deleteTree(Node treenode)
+{
+    if(treenode == nullptr)
+        return ;
+    deleteTree(treenode->lchild);
+    deleteTree(treenode->rchild);
+    delete treenode;
+}
+ 
+bool isiDenticalTree(Node treenode1, Node treenode2)
+{
+    if(treenode1 == nullptr && treenode2 == nullptr)
+        return true;
+    if(treenode1 == nullptr && treenode2 != nullptr)
+        return false;
+    if(treenode1 != nullptr && treenode2 == nullptr)
+        return false;
+ 
+    if(treenode1->data != treenode2->data)
+        return false;
+ 
+    if(isiDenticalTree(treenode1->lchild, treenode2->lchild) && isiDenticalTree(treenode1->rchild, treenode2->rchild))
+        return true;
+ 
+    return false;
+}
+ 
+int main()
+{
+    while(scanf("%d", &N) && N)
+    {
+        scanf("%d", &L);
+ 
+        Root root = buildtree();
+        //dfs(root);
+        for(int i = 0; i < L; i++)
+        {
+            Root root1 = buildtree();
+            if(isiDenticalTree(root, root1))
+                printf("Yes\n");
+            else
+                printf("No\n");
+            deleteTree(root1);
+        }
+    }
+    return 0;
+}
+```
+
+
+
+7-2 是否完全二叉搜索树 (30 分)
+
+将一系列给定数字顺序插入一个初始为空的二叉搜索树（定义为左子树键值大，右子树键值小），你需要判断最后的树是否一棵完全二叉树，并且给出其层序遍历的结果。
+
+1. 如果当前访问的节点的左右孩子是情况3，说明不是完全二叉树，直接返回false。
+2. 如果当前访问的节点的左右孩子是情况1，继续访问其他节点。
+3. 如果当前访问的节点的左右孩子是情况2或者情况4，那么就做一个判断（接下来访问的所有节点必须全部是叶子节点）。
+    具体代码看下面程序中的Pan(BinTree BST)函数。
+
+```c++
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct TNode* BinTree;
+struct TNode{
+    int Data;
+    BinTree Left;
+    BinTree Right;
+};
+BinTree Insert( BinTree BST, int x )
+{
+    if(!BST){
+        BST=(BinTree)malloc(sizeof(struct TNode));
+        BST->Data=x;
+        BST->Left=BST->Right=NULL;
+    }
+    else{
+        if(x>BST->Data) BST->Left=Insert( BST->Left, x );
+        else if(x<BST->Data) BST->Right=Insert( BST->Right, x );
+    }
+    return BST;
+}
+void Out(BinTree BST)
+{
+    int i,front=0,tail=0,p=0;
+    BinTree a[30],x;
+    a[++tail]=BST;
+    while(tail!=front){
+        x=a[++front];
+        if(p==0) {
+            printf("%d",x->Data);
+            p=1;
+        }
+        else printf(" %d",x->Data);
+        if(x->Left) a[++tail]=x->Left;
+        if(x->Right) a[++tail]=x->Right;
+    }
+}
+void Pan(BinTree BST)
+{
+    int i,front=0,tail=0,q=0;
+    BinTree a[30],x;
+    a[++tail]=BST;
+    while(tail!=front){
+        x=a[++front];
+        if(!x->Left&&x->Right){
+        	printf("\nNO");
+        	return;
+		}
+        if(x->Left&&x->Right){
+			a[++tail]=x->Left;
+			a[++tail]=x->Right;
+		}
+        if(!x->Right&&x->Left){
+			a[++tail]=x->Left;
+			q=1;
+		}
+		if(!x->Right&&!x->Left) q=1;
+		while(q==1&&tail!=front){
+			x=a[++front];
+			if(x->Left||x->Right){
+				printf("\nNO");
+        		return;
+			}
+		}
+    }
+    printf("\nYES");
+}
+int main()
+{
+    int n,i,x;
+    BinTree BST=NULL;
+    scanf("%d",&n);
+    for(i=0;i<n;i++){
+        scanf("%d",&x);
+        BST=Insert(BST, x);
+    }
+    Out(BST);
+    Pan(BST);
+    return 0;
+}
+
+```
 
 
 
@@ -3693,88 +4220,259 @@ D. a=’\’;和c=’\0xab’;语句都不正确
 
 
 
+## 函数题：
 
-三、
+### 6-1 邻接矩阵存储图的深度优先遍历 
 
-```c
-void f(int x) {
-    if (x==0) 
-        return;
-    else {
-        f(x/3); 
-        printf("%d",x%3); 
+试实现邻接矩阵存储图的深度优先遍历。
+
+**函数接口定义：**
+
+```c++
+void DFS( MGraph Graph, Vertex V, void (*Visit)(Vertex) );
+```
+
+其中`MGraph`是邻接矩阵存储的图，定义如下：
+
+```c++
+typedef struct GNode *PtrToGNode;
+struct GNode{
+    int Nv;  /* 顶点数 */
+    int Ne;  /* 边数   */
+    WeightType G[MaxVertexNum][MaxVertexNum]; /* 邻接矩阵 */
+};
+typedef PtrToGNode MGraph; /* 以邻接矩阵存储的图类型 */
+```
+
+函数`DFS`应从第`V`个顶点出发递归地深度优先遍历图`Graph`，遍历时用裁判定义的函数`Visit`访问每个顶点。当访问邻接点时，要求按序号递增的顺序。题目保证`V`是图中的合法顶点。
+
+**裁判测试程序样例：**
+
+```c++
+#include <stdio.h>
+ 
+typedef enum {false, true} bool;
+#define MaxVertexNum 10  /* 最大顶点数设为10 */
+#define INFINITY 65535   /* ∞设为双字节无符号整数的最大值65535*/
+typedef int Vertex;      /* 用顶点下标表示顶点,为整型 */
+typedef int WeightType;  /* 边的权值设为整型 */
+ 
+typedef struct GNode *PtrToGNode;
+struct GNode{
+    int Nv;  /* 顶点数 */
+    int Ne;  /* 边数   */
+    WeightType G[MaxVertexNum][MaxVertexNum]; /* 邻接矩阵 */
+};
+typedef PtrToGNode MGraph; /* 以邻接矩阵存储的图类型 */
+bool Visited[MaxVertexNum]; /* 顶点的访问标记 */
+ 
+MGraph CreateGraph(); /* 创建图并且将Visited初始化为false；裁判实现，细节不表 */
+ 
+void Visit( Vertex V )
+{
+    printf(" %d", V);
+}
+ 
+void DFS( MGraph Graph, Vertex V, void (*Visit)(Vertex) );
+ 
+ 
+int main()
+{
+    MGraph G;
+    Vertex V;
+ 
+    G = CreateGraph();
+    scanf("%d", &V);
+    printf("DFS from %d:", V);
+    DFS(G, V, Visit);
+ 
+    return 0;
+}
+ 
+/* 你的代码将被嵌在这里 */
+```
+
+**样例：**
+
+![aHR0cHM6Ly9pbWFnZXMucHRhdXNlcmNvbnRlbnQuY29tLzEwMQ](assets/C语言 程序设计基础/aHR0cHM6Ly9pbWFnZXMucHRhdXNlcmNvbnRlbnQuY29tLzEwMQ-16714387082862.png)
+
+**输入样例：**
+
+```undefined
+5
+```
+
+**输出样例：**
+
+```typescript
+DFS from 5: 5 1 3 0 2 4 6
+```
+
+**代码：**
+
+```c++
+void DFS(MGraph Graph, Vertex V, void(* Visit)(Vertex))
+{
+    Visit(V);
+    Visited[V] = true;
+    for(int i = 0; i < Graph->Nv; i++)
+    {
+        if(Visited[i] || Graph->G[V][i] == INFINITY)
+            continue;
+        if(Graph->G[V][i] != INFINITY)
+            DFS(Graph, i, Visit);
     }
 }
 ```
 
-执行f(16)的结果是 121
-
-f(16)变为f（5） + 1，再变为f(1)+21，再变为121
 
 
+<br>
 
 
 
-五、
+### 6-2 邻接表存储图的广度优先遍历
 
-设有以下语句，则变量 `c` 的十进制数是： `char a = 3, b = 6, c; c = a^b<<4-2;`(2分)
+试实现邻接表存储图的广度优先遍历。
 
-1. 27
-2. 20
-3. 78
-4. 97
+**函数接口定义：**
 
-运算符优先级应该是减大于左移大于异或，a是0011，b是0110，b先左移两位变为011000，再和a异或得到11011，也就是27
-
-
-
-六、
-
-
-以下给出四种算法的时间复杂度，如果当 N=100 时它们对应的运行时间依次是：A 算法 100 毫秒、B 算法 30 毫秒、C 算法 20 毫秒、D 算法 10 毫秒，则当 N=200 时，哪种算法最快？ **B**
-
-1. ```
-    A. O(N)
-    B. O(N^2)
-    C. O(N^3)
-    D. O(N^4)
-    ```
-
-    - A：原来O(N) = KN = 100	现在O(2N) = K * 2N = 200
-    - B：原来O(N^2) = k * n^2 = 30 现在O(2N) = k * (2n)^2 =  120
-    - C：原来O(N^3) = k * n^3 = 20 现在O(2N) = k * (2n)^3 = 160
-    - D：原来O(N^4) = k * n^4 = 10 现在O(2N) = k * (2n)^4 = 160
-
-
-
-七、
-
-- 
-
-
-
-
-
-C语言中，全局变量和局部静态变量是存储在静态存储区的，他们在分配的时候都被系统默认初始化为0；而局部自动变量是在栈上分配内存的，如果不对它们进行初始化，那么他们可能是任意的随机值。
-
-
-（1）main函数内的变量不是全局变量，而是局部变量。
-
-（2）只不过它的生命周期和全局变量一样长而已。
-
-（3）全局变量一定是定义在函数外部的。
-
-
-
-
-
-c++中 . 和 -> 主要是用法上的不同。
-1、A.B 则A为对象或者结构体；
-2、A->B 则A为指针，->是成员提取。A->B是提取A中的成员B，A只能是指向类、结构、联合的指针；
-
-```
-p->val 和 (*p).val使用上等价
+```c++
+void BFS ( LGraph Graph, Vertex S, void (*Visit)(Vertex) );
 ```
 
+其中`LGraph`是邻接表存储的图，定义如下：
 
+```objectivec
+/* 邻接点的定义 */
+typedef struct AdjVNode *PtrToAdjVNode; 
+struct AdjVNode{
+    Vertex AdjV;        /* 邻接点下标 */
+    PtrToAdjVNode Next; /* 指向下一个邻接点的指针 */
+};
+ 
+/* 顶点表头结点的定义 */
+typedef struct Vnode{
+    PtrToAdjVNode FirstEdge; /* 边表头指针 */
+} AdjList[MaxVertexNum];     /* AdjList是邻接表类型 */
+ 
+/* 图结点的定义 */
+typedef struct GNode *PtrToGNode;
+struct GNode{  
+    int Nv;     /* 顶点数 */
+    int Ne;     /* 边数   */
+    AdjList G;  /* 邻接表 */
+};
+typedef PtrToGNode LGraph; /* 以邻接表方式存储的图类型 */
+```
+
+函数`BFS`应从第`S`个顶点出发对邻接表存储的图`Graph`进行广度优先搜索，遍历时用裁判定义的函数`Visit`访问每个顶点。当访问邻接点时，要求按邻接表顺序访问。题目保证`S`是图中的合法顶点。
+
+**裁判测试程序样例：**
+
+```c++
+#include <stdio.h>
+ 
+typedef enum {false, true} bool;
+#define MaxVertexNum 10   /* 最大顶点数设为10 */
+typedef int Vertex;       /* 用顶点下标表示顶点,为整型 */
+ 
+/* 邻接点的定义 */
+typedef struct AdjVNode *PtrToAdjVNode; 
+struct AdjVNode{
+    Vertex AdjV;        /* 邻接点下标 */
+    PtrToAdjVNode Next; /* 指向下一个邻接点的指针 */
+};
+ 
+/* 顶点表头结点的定义 */
+typedef struct Vnode{
+    PtrToAdjVNode FirstEdge; /* 边表头指针 */
+} AdjList[MaxVertexNum];     /* AdjList是邻接表类型 */
+ 
+/* 图结点的定义 */
+typedef struct GNode *PtrToGNode;
+struct GNode{  
+    int Nv;     /* 顶点数 */
+    int Ne;     /* 边数   */
+    AdjList G;  /* 邻接表 */
+};
+typedef PtrToGNode LGraph; /* 以邻接表方式存储的图类型 */
+ 
+bool Visited[MaxVertexNum]; /* 顶点的访问标记 */
+ 
+LGraph CreateGraph(); /* 创建图并且将Visited初始化为false；裁判实现，细节不表 */
+ 
+void Visit( Vertex V )
+{
+    printf(" %d", V);
+}
+ 
+void BFS ( LGraph Graph, Vertex S, void (*Visit)(Vertex) );
+ 
+int main()
+{
+    LGraph G;
+    Vertex S;
+ 
+    G = CreateGraph();
+    scanf("%d", &S);
+    printf("BFS from %d:", S);
+    BFS(G, S, Visit);
+ 
+    return 0;
+}
+ 
+/* 你的代码将被嵌在这里 */
+```
+
+**样例：**
+
+![aHR0cHM6Ly9pbWFnZXMucHRhdXNlcmNvbnRlbnQuY29tLzEwMQ](assets/C语言 程序设计基础/aHR0cHM6Ly9pbWFnZXMucHRhdXNlcmNvbnRlbnQuY29tLzEwMQ.png)
+
+
+
+**输入样例：**
+
+```undefined
+2
+```
+
+**输出样例：**
+
+```typescript
+BFS from 2: 2 0 3 5 4 1 6
+```
+
+**代码：**
+
+```c++
+void BFS(LGraph Graph, Vertex S, void (* Visit)(Vertex))
+{
+    int *que = (int *)malloc((Graph->Nv + 100) * sizeof(int));
+    int front = 0, rear = 0;
+ 
+    que[rear++] = S;
+    Visited[S] = true;
+    while(front != rear)
+    {
+        int temp = que[front++];
+ 
+        Visit(temp);
+ 
+        PtrToAdjVNode to = Graph->G[temp].FirstEdge;
+        while(to != NULL)
+        {
+            if(Visited[to->AdjV])
+            {
+                to = to->Next;
+                continue;
+            }
+ 
+            que[rear++] = to->AdjV;
+            Visited[to->AdjV] = true;
+            to = to->Next;
+        }
+    }
+}
+```
 
