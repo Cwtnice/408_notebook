@@ -742,3 +742,48 @@ int main(){
 }
 ```
 
+
+
+<hr>
+
+
+
+## 1016 部分A+B
+
+题目链接：[部分A+B](https://pintia.cn/problem-sets/994805260223102976/exam/problems/994805306310115328?type=7&page=0)
+
+AC代码：
+
+```cpp
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+string a, b;
+int da, db;
+
+int getnum(string s, int d){
+    int ans = 0;
+    for(int i = 0; i < s.length(); i++)
+        if(s[i] - '0' == d)
+            ans = ans * 10 + d;
+    return ans;
+}
+
+int main(){
+    cin >> a >> da >> b >> db;
+
+    cout << getnum(a, da) + getnum(b, db) << endl;
+
+    return 0;
+}
+```
+
+
+
+<hr>
+
+
+
+
+
