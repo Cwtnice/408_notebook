@@ -23,6 +23,9 @@
 | 1013 |          数素数          |     筛选法求素数     |
 | 1014 |      福尔摩斯的约会      |     模拟 小坑多      |
 | 1015 |          德才论          |      模拟 排序       |
+| 1016 |         部分A+B          |       简单语法       |
+| 1017 |          A除以B          |   大数除法（好题）   |
+| 1018 |        锤子剪刀布        |         模拟         |
 
 
 
@@ -784,6 +787,97 @@ int main(){
 <hr>
 
 
+## 1017 A除以B
+
+题目链接：[A除以B](https://pintia.cn/problem-sets/994805260223102976/exam/problems/994805305181847552?type=7&page=0)
+
+AC代码：
+
+```cpp
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+string a;
+int b;
+
+int main(){
+	cin >> a >> b;
+	int len = a.length();
+    // 特殊情况：当a只有一位数且这一位数小于b 这时候商数就是0 要输出
+	if(len == 1 && (a[len-1] - '0') < b){
+		cout << "0 " << (a[len-1] - '0') << endl;
+	}
+	else {
+        // 第一位特别处理 如果是0就不输出
+		int temp = (a[0] - '0') / b;
+		if(temp != 0)
+			cout << temp;
+		int remain = (a[0] - '0') % b;
+
+        // 余下的位
+		for(int i = 0; i < len; i++){
+			temp= (a[i] - '0') + remain * 10;
+			cout << temp / b;
+			remain = temp % b;
+		}
+		cout << " " << remain << endl;
+	}
+}
+```
 
 
 
+<hr>
+
+
+
+## 1018 锤子剪刀布
+
+题目链接：1018 锤子剪刀布
+
+AC代码：
+
+```cpp
+#include <stdio.h>
+
+// 返回胜率最高的手势
+char max(int B, int C, int J) {
+    if(B >= C && B >= J) return 'B';
+    if(C >  B && C >= J) return 'C';
+    /* J > B && J > C */ return 'J';
+}
+ 
+int main() {
+    int N;
+    char a, b;
+    int AwinB = 0, AwinC = 0, AwinJ = 0;
+    int BwinB = 0, BwinC = 0, BwinJ = 0;
+ 
+    scanf("%d", &N);
+    for(int i = 0; i < N; i++) {
+        scanf(" %c %c", &a, &b);  /* Notice the space before every %c */
+        if(a == 'B' && b == 'C') AwinB++;
+        if(a == 'C' && b == 'J') AwinC++;
+        if(a == 'J' && b == 'B') AwinJ++;
+        if(a == 'B' && b == 'J') BwinJ++;
+        if(a == 'C' && b == 'B') BwinB++;
+        if(a == 'J' && b == 'C') BwinC++;
+    }
+ 
+    int Awin = AwinB + AwinC + AwinJ;
+    int Bwin = BwinB + BwinC + BwinJ;
+    int Tie = N - Awin - Bwin;
+    printf("%d %d %d\n", Awin, Tie, Bwin);
+    printf("%d %d %d\n", Bwin, Tie, Awin);
+    printf("%c %c", max(AwinB, AwinC, AwinJ), max(BwinB, BwinC, BwinJ));
+ 
+    return 0; 
+} 
+```
+
+为什么18行要多一个空格呢？
+
+scanf() 是带有缓冲区的。遇到 scanf() 函数，程序会先检查缓冲区中是否已经有数据。如果没有，就等待用户输入。用户从键盘输入的每个字符都会暂时保存到缓冲区，直到按下回车键，输入结束，scanf() 再从缓冲区中读取数据，赋值给变量。
+如果不加空格，上一次的\n会被保存下来
+解决办法：修改格式，我们忽略缓冲区上一次的残留，在开头多一个空格
