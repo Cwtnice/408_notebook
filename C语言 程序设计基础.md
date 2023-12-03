@@ -244,7 +244,7 @@ int a[] = {1, 3, 4};
 int *p = &a[-1];	// 可以这样 此时p[1] = a[0] = 1, -1相当于偏移
 ```
 
-- a数组名，只能做右值，表示数组元素的首地址，也就是a[0]的首地址
+- a数组名， **只能做右值** ，表示数组元素的首地址，也就是a[0]的首地址
 - a[0]，数组的第一个元素，做左值表示第0个元素对应的内存空间，做右值表示第0个元素的值
 - &a，常量，只能做右值，表示整个数组的首地址
 - &a[0]，[]的优先级要高于&，所以a先和[]结合再取地址，&a[0]做右值时等同于a，表示数组首元素的地址，但是意义不相同
@@ -441,7 +441,7 @@ int b = strlen(s);	// 4
 
 
 
-### strcpy()
+### strcpy():
 
 声明：
 
@@ -553,7 +553,7 @@ sizeof(s);	// 输出4 指针的大小（64位结果为8 32位结果为4）
 
 5. 【878，2019】有以下定义，正确的是  **s1的长度要大于s2的长度**
 
-    ```
+    ```c
     char s1[ ]="abcdefg";
     char s2[ ]={'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     ```
@@ -613,7 +613,16 @@ sizeof(s);	// 输出4 指针的大小（64位结果为8 32位结果为4）
 
     
 
-9. 
+9. 【878，2020】下列程序段的输出结果是： `puter`
+
+    ```cpp
+    char *s[]={"Zhejiang", "University", "Computer", "Science"};	// 字符指针数组
+    printf("%s", *(s+2)+3);	// 改成a[2]+3也可以
+    ```
+
+    
+
+10. 
 
 
 
@@ -1099,18 +1108,18 @@ node* p = new LinkNode(x);
 
     
 
-6. 程序的输出结果是： **cb**
+6. 【878，2017】程序的输出结果是： **cb**
 
     ```c
     char *s="adc";
-        while (*s++) // 遍历字符串 优先级是*大于自增 且在判定完再加1
-            if (*s)     // 只要*s不为空
-                putchar(*s-1);  // 输出前一个字符
+    while (*s++) // 遍历字符串 优先级是*大于自增 且在判定完再加1
+    	if (*s)     // 只要*s不为空
+    		putchar(*s-1);  // 输出前一个字符 dc各自输出前一个字符就是cb
     ```
 
     
 
-7. 程序的输出结果是：**IRST**
+7. 【878，2017】程序的输出结果是：**IRST**
 
     ```c
     char *c[3]={"FIRST", "SECOND", "THIRD"};
@@ -1138,7 +1147,7 @@ node* p = new LinkNode(x);
 
     
 
-9. 不正确的赋值或赋初值方法是： **C**
+9. 【878，2017】不正确的赋值或赋初值方法是： **C**
 
     ```c
     char str[]="string";
@@ -1154,7 +1163,7 @@ node* p = new LinkNode(x);
 
     
 
-10. 对于下面定义，赋值不正确的是 **D**
+10. 【878，2017】对于下面定义，赋值不正确的是 **D**
 
     ```c
     struct Student {
@@ -1181,7 +1190,7 @@ node* p = new LinkNode(x);
     D. a[0][-1]
     ```
     
-    - 对于二维数组 `int a[M][N]` 来说，`arr[i][j]` 的地址是 `(*arr) + i*N + j`，其值就再加一个*
+    - 对于二维数组 `int a[M][N]` 来说，`arr[i][j]` 的地址是 `(*arr) + i*N + j`，取值就再套一个*
     - 因此A选项 `a[-1][3]` 相当于a+1的值，也就是第二个元素的值，也就是相当于 `a[0][1]`
 
     
@@ -1192,7 +1201,7 @@ node* p = new LinkNode(x);
 
 
 
-13. 对于定义 `char *s, str[10]= "hello";`，下面哪个语句是正确的？ **C**
+13. 【878，2018】对于定义 `char *s, str[10]= "hello";`，下面哪个语句是正确的？ **C**
 
     ```c
     A. strcpy(s, str);
@@ -1201,7 +1210,9 @@ node* p = new LinkNode(x);
     D. s=str[0];
     ```
 
-14. 下列程序的输出结果为：`abc:9:3`
+    
+
+14. 【878，2018】下列程序的输出结果为：`abc:9:3`
 
     ```c
     char s[]="abc\0d123";
@@ -1227,7 +1238,7 @@ node* p = new LinkNode(x);
 
     
 
-16. 下列表达式哪个是无意义的？ `A`
+16. 【878，2018】下列表达式哪个是无意义的？ `A`
 
     ```c
      A. "Flower"-"Flow"
@@ -1242,7 +1253,7 @@ node* p = new LinkNode(x);
 
     
 
-17. 对于以下定义，表达式 `(x+y)%2+a/(int)b` 的值为 **4** （但我感觉是4.6）
+17. 【878，2019】对于以下定义，表达式 `(x+y)%2+a/(int)b` 的值为 **4** （但我感觉是4.6）
           
 
        ```c
@@ -1255,7 +1266,7 @@ node* p = new LinkNode(x);
 
        
 
-18. 对于变量定义 `int *p[3], a[3];` 正确的赋值是 **D**
+18. 【878，2019】对于变量定义 `int *p[3], a[3];` 正确的赋值是 **D**
 
        ```c++
        A. p = a
@@ -1270,7 +1281,16 @@ node* p = new LinkNode(x);
 
        
 
-19. 经过如下定义时的初始化 `int a[ ][3] = { {1,4}, {3,2}, {4,5,6}, {0} }`，`a[2][1]` 的值是 **5**
+19. 【878，2019】经过如下定义时的初始化 `int a[ ][3] = { {1,4}, {3,2}, {4,5,6}, {0} }`，`a[2][1]` 的值是 **5**
+
+    ```c
+    // 编译器会自动将没定义的按0填充，相当于
+    int a[][3] = {{1, 4, 0}, {3, 2, 0}, {4, 5, 6}, {0, 0, 0}};
+    
+    // a[2][1] 就是从{4, 5, 6}中取第二个元素 就是5
+    ```
+
+    
 
 20. 【878，2019】以下定义中，哪个p不是指针？ **都是指针**
 
@@ -1292,14 +1312,14 @@ node* p = new LinkNode(x);
       ```
 
       - D选项，a[20]是一个字符怎么能容纳一个字符串？况且a[20]也是不存在的！
-      - B选项，a是指针，但是它已经指向在堆栈中分配的20个字符空间，现在这个情况a又指向数据区中的"Zhejiang"常量，这里的指针a出现混乱，不允许！
+      - B选项，a是指针，但是它已经指向在堆栈中分配的20个字符空间，现在这个要让a又指向数据区中的"Zhejiang"常量，这里的指针a出现混乱，不允许！
       - C选项，*p等号右边的得是一个地址
 
       
 
 22. 【878，2020】设有变量定义： `int a[2][3]={0,1,2,3,4,5};` 下面 4 个表达式中最大的是：**B**
 
-      ```c++
+      ```cpp
       A. a[1][2]-2
       B. a[0][3]+1
       C. a[2][-3]
@@ -1314,7 +1334,7 @@ node* p = new LinkNode(x);
 
     
 
-23. 设 `x`、`y`、`z` 均为 `int` 类型，若表达式 `x||y&&z` 的值为 1，则 **D**
+23. 【878，2020】设 `x`、`y`、`z` 均为 `int` 类型，若表达式 `x||y&&z` 的值为 1，则 **D**
 
       ```
       A. 若 x 为 0，则 y 和 z 必均为 1
@@ -1383,7 +1403,9 @@ node* p = new LinkNode(x);
     ```
 
     - B 选项 不能把 `char*` 类型赋值给字符数组
-    - C选项 t+1是 `bc` ，`*(t+1)` 是b
+    - C选项 t+1是 `bc` ，t+1看做一个整体记为s， `*(t+1)` 就是 `*s` 就是 `*(s+0)` 就是 `s[0]` 就是 `b`
+
+    
 
 27. 【878，2001】设 `char s[10], *p` 则下列最正确的语句为：
 
@@ -1547,6 +1569,31 @@ switch(表达式){
 - 根据表达式的结果，找到对应的case，执行对应的语句段。 **并继续执行下面所有的代码（包括default），直到遇到break或者语句结束**
 - 如果case都不满足，就执行default，default可以省略，表示什么都不做
 
+示例：
+
+```c
+char grade = 'B'; /* 局部变量定义 */
+switch (grade)
+{
+    case 'A':
+        printf("很棒！\n");
+        break;
+    case 'B':
+    case 'C':
+        printf("做得好！\n");
+        break;
+    case 'D':
+        printf("您通过了！\n");
+        break;
+    case 'F':
+        printf("最好再试一下！\n");
+        break;
+    default:
+        printf("无效的成绩！\n");
+}
+printf("您的成绩是 %c！\n", grade);
+```
+
 
 
 <br>
@@ -1670,7 +1717,7 @@ do{
 
 ## 习题
 
-1. 执行下列程序后，s的值是 **6**
+1. 【878，2017】执行下列程序后，s的值是 **6**
 
     ```c
     int i=5, s=0; 
@@ -1682,7 +1729,7 @@ do{
 
     
 
-2. 语句 `for(int i=0,j=10; i=j=10; i++,j--);` 的执行次数是 无限次
+2. 【878，2019】语句 `for(int i=0,j=10; i=j=10; i++,j--);` 的执行次数是 无限次
 
     ```
     因为中间的句子是赋值语句, 恒为1
@@ -1697,7 +1744,7 @@ do{
     {   
         int i=5, s=0;
         do{
-            if (i%2) 
+            if (i%2) // 是奇数
                 continue; // 跳过下面的 直接来到while的判断
             else
                 s+=i;
@@ -1982,7 +2029,7 @@ void func(void){
 
         
 
-6. 【878 2018】调用下列函数 `f(f(3))` 的返回值是什么？ ==0==
+6. 【878，2018】调用下列函数 `f(f(3))` 的返回值是什么？ ==0==
 
     ```c++
     int f(int k) {
@@ -1998,7 +2045,7 @@ void func(void){
 
     
 
-7. 【878，2022】下列程序的输出结果是： ==1 5==
+7. 【878，2020】下列程序的输出结果是： ==1 5==
 
     ```c++
     void fun(int n, int *m)
@@ -2508,7 +2555,7 @@ fprintf(fp, "%d%f", n, x);
     A. fopen("D:\user\abc.txt","r+");
     B. fopen("D:\user\abc.txt","w+");
     C. fopen("D:\\user\\abc.txt","r+");
-    D. fopen("D:\\user\\abc.txt","w+");
+    D. fopen("D:\\user\\abc.txt","w+");	// 会清空原文件
     ```
 
     
@@ -3116,6 +3163,44 @@ void Topsort( Graph G )
 
 ## 2017
 
+### 5-1 简单选择排序
+
+下列程序读入10个整数，并将其从小到大排序后输出。请填空补全代码。
+
+```c
+void sort(int a[],int n){   
+    int i, k, index, temp;
+    for (k=0; k<n-1; k++)  {            
+        index=k ; 
+        for(i=k+1;i<n;i++) 
+            if (a[i]<a[index])  
+                index = i;    // 此处为空
+        if (k!=index )  {	              
+            temp=a[index]; 
+            a[index]=a[k];
+            a[k]=temp;    // 此处为空
+        }
+    }   
+}
+
+int main(){
+    int a[10], i;
+    for (i=0;i<10;i++) 
+        scanf("%d",&a[i]); 
+    
+    sort(a,10);	// 此处为空
+    for (i=0;i<10;i++) 
+        printf("%d ",a[i]);
+    return 0;
+}
+```
+
+
+
+<br>
+
+
+
 ### 5-2 堆排序
 
 ```c++
@@ -3153,24 +3238,30 @@ void Heapsort( ElementType A[ ], int N )
 
 ## 2018
 
-4-3 运行下列程序后输出是： `u#ience#5#4`
+### 4-1 下列程序的输出结果是
 
-```c++
+`-1 2 6 7 3 1 5 4`
+
+```c
+void func( int i, int a[], int n )
+{   int j, temp;
+    temp = a[i];
+    for ( j = i; j>0 && a[j-1]>temp; j-- ) { a[j]=a[j-1]; }
+    a[j] = temp;
+}
+
 int main()
-{  
-    char *s[] = {"computer", "science"}, *p; 
-    char format[] = "%d#%c"; 
-    p = *s;
-    printf("%c#", (++p)[3]);  
-    printf("%s#", s[1]+2);
-    printf(format, strlen(format), "123456"[2]+1);
+{   int a[] = {6, -1, 7, 2, 3, 1, 5, 4}, i, n;
+    n = sizeof(a)/sizeof(int);
+    for( i = 1; i < n/2; i++ ) { func(i, a, n); }
+    for( i = 0; i < n; i++ )  { printf("%d ", a[i]); }
     return 0;
 }
-```
 
-- `(++p)[3])` 相当于 `*((++p)+3)` 相当于 `*(p+4)` 相当于 `p[4]`
-- s[1]就是science，再加2你懂的
-- `"123456"[2]+1`  就是字符3加1，就是字符4
+// 第一轮 -1 6 7 2 3 1 5 4 
+// 第二轮 -1 6 7 2 3 1 5 4 
+// 第三轮 -1 2 6 7 3 1 5 4 
+```
 
 
 
@@ -3178,11 +3269,71 @@ int main()
 
 
 
-4-4 下列程序的输出结果是：`First:12 Next:13`
+### 4-2 运行下列程序后输出是
+
+`299`
+
+```c
+#define IsD(c)  ( (c)>='0' && (c)<='9' )	// 是数字
+#define IsA(c)  ( (c)>='a' && (c)<='f' )	// 是小写字母
+
+int main()
+{   char s[] = "-12-bB-3";
+    int n = 0, flag = 1, i;
+    for ( i = 0; i < sizeof(s); i++ ) 
+        if ( IsD(s[i]) )  n = n*16+s[i]-'0';
+        else if( IsA(s[i]) ) n = n*16+10+s[i]-'a';
+        else if( s[i]== '-' ) flag = -flag;
+        else break;
+    printf("%d", n);
+    return 0;
+}
+
+// flag其实没起作用
+// 读到1时，n的值变为1
+// 读到2时，n的值变为18
+// 读到b时，n的值变为18*16+10+1=299
+// 读到B时，break
+```
+
+
+
+<br>
+
+
+
+### 4-3 运行下列程序后输出是
+
+ `u#ience#5#4`
+
+```c++
+int main()
+{  
+    char *s[] = {"computer", "science"}, *p; 
+    char format[] = "%d#%c"; 
+    p = *s;
+    printf("%c#", (++p)[3]);  // "omputer"中取[3] 单个字符
+    printf("%s#", s[1]+2);	// "ience"
+    printf(format, strlen(format), "123456"[2]+1);	// format换进去 单个字符
+    return 0;
+}
+```
+
+- `(++p)[3])` 相当于 `*((++p)+3)` 相当于 `*(p+4)` 相当于 `p[4]`
+
+
+
+<br>
+
+
+
+### 4-4 下列程序的输出结果是
+
+`First:12 Next:13`
 
 ```c++
 #define  s(x,y)  x^=y^=x^=y     // x^=y^=x^=y的作用是将x和y的值对调
-int  func( int a[], int n )
+int  func( int a[], int n )	// 函数的作用是统计逆序对的数量 
 {   int i, j, k = 0;
     for ( i = 0; i < n; i++ ) 
         for ( j = i+1; j < n; j++ ) 
@@ -3192,14 +3343,12 @@ int  func( int a[], int n )
 
 int main()
 {   int a[7] = {5,1,7,4,3,6,2};
-    printf("First:%d ", func(a,7));
-    s(a[1],a[2]);
-    printf("Next:%d", func(a,7));
+    printf("First:%d ", func(a,7));	// 4+4+2+1+1 = 15
+    s(a[1],a[2]);	// 交换a[1]和a[2]的值后
+    printf("Next:%d", func(a,7));	// 4+5+2+1+1 = 13
     return 0; 
 }
 ```
-
-- s()的作用是将a[1]和a[2]的值交换
 
 
 
@@ -3287,7 +3436,7 @@ void SP( MGraph Graph, WeightType D[][MaxVertexNum], Vertex Path[][MaxVertexNum]
             for( j=0; j<Graph->Nv; j++ )
                 if(D[i][k]+D[k][j]<D[i][j]) {	// 此处为空
                     D[i][j] = D[i][k]+D[k][j]; 	// 此处为空
-                    Path[i][j] = k;	// 此处为空
+                    Path[i][j] = k;	// 此处为空 存储前驱？
                 }
 }
 ```
@@ -3300,22 +3449,48 @@ void SP( MGraph Graph, WeightType D[][MaxVertexNum], Vertex Path[][MaxVertexNum]
 
 ## 2019
 
-4-1 下列程序的输出结果是 `  -5, -12,  -7`
+### 4-1 下列程序的输出结果是：
+
+`  -5, -12,  -7`
 
 ```c
+// 实现z = y - x
 void sub(int x, int y, int *z)
-{   *z =*z + y - x;   }
+{   *z =*z + y - x;   }	
 
 int main()
 {   int a=0, b=0, c=0;
-    sub(10, 5, &a);
-    sub(7, a, &b);
-    sub(a, b, &c);
-    printf("%4d,%4d,%4d\n", a, b, c);
+    sub(10, 5, &a);	// -5
+    sub(7, a, &b);	// -12
+    sub(a, b, &c);	// -7
+    printf("%4d,%4d,%4d\n", a, b, c);	// %4d 输出4位 用空格补齐
 }
 ```
 
-- 注意%4d哦
+
+
+<br>
+
+
+
+### 4-2 为使得t=4，要求a、b的关系是
+
+`a>0&&a<b`
+
+但我觉得应该是 `a>0&&a!=b`
+
+```c
+int main()
+{   int a,b,s,t;
+    scanf("%d,%d",&a,&b);  s = 1; t = 0;
+    if(a > 0) s = s + 1;    // 需要, s变成2
+    if(a > b) t = s + t;    // 这一步有没有其实不影响啊
+    else if(a == b) t = t+1;// 不需要
+    else t = 2 * s;     // 需要, t变成4
+    printf("t=%d\n",t);    // 要求输入t=4
+    return 0;
+}
+```
 
 
 
@@ -3367,8 +3542,8 @@ int main()
 void move(char s[],int start, int k, int *key)
 {   char t[20];
     int i;
-    for (i=0;i<k;i++)    t[i]= s[start+ key[i] -1];	// 此处为空
-    for (i=0;i<k;i++)    s[start+i]=t[i];	// 此处为空
+    for (i=0;i<k;i++)    t[i]= s[start+ key[i] -1];	// 此处为空 实现了根据key[]在组内调整顺序
+    for (i=0;i<k;i++)    s[start+i]=t[i];	// 此处为空	将这一组填回到s[]中
 } 
 ```
 
@@ -3402,18 +3577,18 @@ int main()
 
 ```c++
 int main()
-{   int n=1,count=1;
+{   int n=1,count=1;	// count统计项数
     float x;
     double sum, term;
     scanf("%f", &x );
     sum=x;
     term=x;
     do {
-        term = -term*((x*x)/((n+1)*(n+2)));	// 此处为空
+        term = -term*((x*x)/((n+1)*(n+2)));	// 此处为空 当前项
         sum = sum+term;
         n = n+2;
         count++;	//  此处为空
-    } while (fabs(term)>=1e-5);	// 此处为空
+    } while (fabs(term)>=1e-5);	// 此处为空 注意绝对值fabs()
     printf("sin(%f)=%f, total term#: %d\n",x,sum,count);
     return 0;
 }
@@ -3436,10 +3611,12 @@ void BuildMaxHeap( ElementType A[], int N )
 
    for ( i = (N-1)/2; i >= 0; i-- ) {
       j = i;
-      for ( Tmp = A[j]; leftchild(j) < N; j = child ) {
+      for ( Tmp = A[j]; leftchild(j) < N; j = child ) {	// Tmp暂存当前子树的根
          child = leftchild(j);
-         if (A[child] < A[child+1])	// 此处为空
+         // 如果右孩子更大 选右孩子
+         if (A[child] < A[child+1])	// 此处为空  
             child ++;
+         // 将更大的孩子放上来
          if (Tmp < A[child])	// 此处为空
              A[j] = A[child];
          else  break;
@@ -3457,14 +3634,140 @@ void BuildMaxHeap( ElementType A[], int N )
 
 ## 2020 
 
-5-2 下列程序将 C 语言源程序 exam.c 中的注释内容（`/*` 和 `*/` 之间的部分）除去，并输出到文件 exam.out 中。请将空缺的部分补上。
+### 4-1 程序输出结果是：
+
+`0, -7, 5, 15, 60, `
+
+```c
+#include <stdio.h>
+int main()
+{   int m=0, sum=0;
+    char c, oldc='+';
+    do {c=getchar();
+        if(c<='9'&&c>='0')  m=10*m+c - '0';
+        else { if(oldc=='+') sum += m;
+           else if(oldc=='-')sum -= m;
+           else sum *= m;
+           m=0;
+           oldc=c;
+           printf("%d, ", sum);
+        }
+    }  while(c!='=');
+}
+
+// 输入-7+12*3/4=<回车> 
+
+// 读入'-' sum还是0 将oldc变为- 输出"0, "
+// 读入'7' m变成7 
+// 读入'+' sum减去7变成-7  m更新为0 oldc更新为'+' 输出"-7, "
+// 读入1、2 m变成12
+// 读入'*' sum变为-7+12=5 m更新为0 oldc更新为'*' 输出"5, "
+// 读入3 m变成3
+// 读入/ sum变成5*3=15 m更新为0 oldc更新为'/' 输出"15, "
+// 读入4 m变成4
+// 读入'=' sun变为15*4=60 m更新为0 输出"60, "
+// 判断c == “=” 循环结束
+```
+
+
+
+<br>
+
+
+
+### 4-2 程序运行结果是：
+
+`Thisk!!`
+
+函数 `f(char *s, char c)` 的功能是从字符串中 `过滤空格、\t、\n和c`
+
+```c
+#include <stdio.h>
+void f(char *s, char c)
+{   int i,j;
+    for(i=0, j=0; s[i]!='\0';i++)
+        if (s[i]!=' ' && s[i]!='\t' && s[i]!='\n' && s[i]!=c)  
+            s[j++]=s[i];
+    s[j]= '\0';
+}
+int main()
+{   char s[20]= "This\took\n!!";
+    f(s,'o');
+    printf("%s\n", s);
+}
+```
+
+
+
+
+
+<br>
+
+
+
+### 4-3 程序运行结果是：
+
+`8 6 4 2`
+
+```c
+#include <stdlib.h>
+#define LEN sizeof(struct line)
+struct line
+{   int num ;
+    struct line  *next;
+};
+int main( )
+{   int k ;
+    struct line *p , *head ;
+    head=NULL;	// 新建一个虚拟头结点
+    for(k=1; k<10; k++){
+        if (k%2==1) continue;	// 奇数就跳过
+        p=(struct line *) malloc (LEN) ;	// 偶数生成结点 采用头插法
+        p->num=k;
+        p->next=head;
+        head=p;
+    }
+ 	// 打印链表
+    while(p!=NULL){
+        printf("%d ", p->num) ;
+        p=p->next;
+    }
+    return 0;
+}
+```
+
+
+
+<br>
+
+
+
+### 4-4 希尔排序手工
+
+
+
+<br>
+
+
+
+### 4-5 DFS和最小生成树手工
+
+
+
+<br>
+
+
+
+### 5-2 文件操作
+
+下列程序将 C 语言源程序 exam.c 中的注释内容（`/*` 和 `*/` 之间的部分）除去，并输出到文件 exam.out 中。请将空缺的部分补上。
 
 ```c++
 #include <stdio.h>
 void delcomm(FILE *fp1,FILE *fp2)     
 {   int i=0;
     char c;
-    while((c=fgetc(fp1)!=EOF)	// 此处有空
+    while((c=fgetc(fp1))!=EOF)	// 此处有空
         if (c=='\n')  fprintf(fp2,"\n");
         else
             switch(i){
@@ -3483,9 +3786,7 @@ void delcomm(FILE *fp1,FILE *fp2)
                     if(c=='*') i=3;
                     break;
                 case 3:
-                    i=(
-c=='/'
-(2分))? 0:2;
+                    i=(c=='/')? 0:2;	// 此处为空
                     break;
             }
 }
@@ -3494,7 +3795,7 @@ int main()
     FILE *fp1,*fp2;
     fp1=fopen("exam.c","r");
     fp2=fopen("exam.out","w");
-    delcomm(fp1,fp2;	// 此处有空
+    delcomm(fp1,fp2);	// 此处有空
     fclose(fp1); fclose(fp2);
     return 0;
 }
@@ -3532,7 +3833,7 @@ int Match( char expr[] )
         }
         i++;
     }
-    if (top!=-1)  ret = 0;
+    if (top!=-1)  ret = 0;	// 此处为空
     return ret;
 }
 ```
@@ -3689,7 +3990,7 @@ void ListUnion(List L1,List L2){
 
 
 
-### 2017、二叉搜索树中不小于X的元素（8分）
+### 2017、2020、二叉搜索树中不小于X的元素（8分）
 
 给定一棵二叉搜索树 `T` 和一个整数`X`，要求编写函数，按**非递增序**打印出 `T` 中所有不小于 `X` 的元素。
 
@@ -3925,7 +4226,7 @@ List Rearrange( List L )
 
 其中 `List` 的定义如下：
 
-```
+```c
 typedef struct Node *PtrToNode;
 struct Node {
      int   Key;
